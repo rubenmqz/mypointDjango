@@ -17,7 +17,7 @@ class Post (models.Model):
     title = models.CharField(max_length=140)
     imgURL = models.URLField(null=True, blank=True)
     videoURL = models.URLField(null=True, blank=True)
-    summary = models.TextField(null=True, blank=True)
+    summary = models.TextField()
     body = models.TextField()
     publish_at = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
