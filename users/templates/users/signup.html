@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Registro de usuarios{% endblock%}
+
+{% block body %}
+    <h1>Registro de usuarios</h1>
+
+    {% if error %}
+        <p>{{ error|safe }}</p>
+    {% endif %}
+
+    {% if not registered %}
+    <form method="post" novalidate>
+        {% csrf_token %}
+
+        {%for field in form %}
+            <div class="form-group {%if field.errors %}has-error{%endif%}">
+                <label for="{{ field.id_for_label }}" class="control-label">{{ field.label }}</label>
+                {{ field.errors }}
+                {{ field }}
+                {% if field.help_text %}
+                <p class="help">{{ field.help_text|safe }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit">Registrarse</button>
+    </form>
+    {% endif %}
+{% endblock %}
