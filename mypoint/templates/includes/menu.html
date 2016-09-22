@@ -1,0 +1,10 @@
+<a href="{% url 'site_home' %}">Home</a>
+|
+{% if user.is_authenticated %}
+    Conectado como {{ user.username }}.
+    <a href="{% url 'users_logout' %}">Salir</a>
+{% else %}
+    <a href="{% url 'users_login' %}">Acceder</a>
+{% endif %}
+
+<hr/>
