@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.generic import ListView
 from blog.forms import PostForm
 from blog.models import Post
 
@@ -22,6 +23,16 @@ class HomeView(View):
         posts = Post.objects.filter(publish_at__lt=timezone.now()).order_by('-created_at')
         context = {'posts_list': posts[:10]}
         return render(request, 'blog/home.html', context)
+
+
+class BlogListView(ListView):
+
+    model = User
+    template_name = "blog/blog_list.html"
+
+    def get_queryset(self):
+        return User.objects.filter(post__isnull=False).distinct()
+
 
 
 class PostsByUserView(View):
