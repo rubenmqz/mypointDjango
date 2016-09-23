@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import render
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import View
 from blog.forms import PostForm
@@ -16,8 +16,7 @@ class HomeView(View):
         :return: objeto HttpResponse con los datos de la respuesta
         """
         # recupera todas los posts publicados
-        #TODO: No mostrar los que tengan fecha futura
-        posts = Post.objects.all().order_by('-created_at')
+        posts = Post.objects.filter(publish_at__lt=timezone.now()).order_by('-created_at')
         context = {'posts_list': posts[:10]}
         return render(request, 'blog/home.html', context)
 

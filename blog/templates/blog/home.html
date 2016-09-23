@@ -2,4 +2,8 @@
 {% block body %}
     <h1>Bienvenido a MyPoint!</h1>
     <p>¿Un punto de vista cualquiera? No. MiPunto</p>
+
+    <h2>Últimos Posts</h2>
+
+    {% include 'blog/includes/posts_loop.html' %}
 {% endblock %}

@@ -1,0 +1,14 @@
+    {% for post in posts_list %}
+        <article>
+            <h2>
+                <a href="{% url 'blog_post_detail' post.owner post.pk %}">{{ post.title }}</a>
+            </h2>
+            {% if post.imgURL %}
+                <img src="{{ post.imgURL }}">
+            {% endif %}
+            <p>{{ post.summary }}</p>
+
+        </article>
+    {% empty %}
+        <p>Aún no hay posts!</p>
+    {% endfor %}
