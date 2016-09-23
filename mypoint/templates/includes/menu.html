@@ -2,7 +2,8 @@
 |
 {% if user.is_authenticated %}
     Conectado como {{ user.username }}.
-    <a href="{% url 'blog_new_post' %}">Crear Post</a>
+    <a href="{% url 'blog_posts_by_user' user.username %}">Mi Blog</a>
+    | <a href="{% url 'blog_new_post' %}">Crear Post</a>
     | <a href="{% url 'users_logout' %}">Salir</a>
 {% else %}
     <a href="{% url 'users_login' %}">Acceder</a>

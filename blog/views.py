@@ -1,4 +1,7 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+from django.http import HttpResponseNotFound
 from django.shortcuts import render
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -19,6 +22,26 @@ class HomeView(View):
         posts = Post.objects.filter(publish_at__lt=timezone.now()).order_by('-created_at')
         context = {'posts_list': posts[:10]}
         return render(request, 'blog/home.html', context)
+
+
+class PostsByUserView(View):
+
+    def get(self, request, nombre_de_usuario):
+        """
+        Renderiza todos los posts de un usuario
+        :param request: objeto HttpRequest con los datos de la petición
+        :return: objeto HttpResponse con los datos de la respuesta
+        """
+        # recupera todas los posts publicados del usuario
+        user = User.objects.filter(username=nombre_de_usuario)
+        if len(user) == 0:
+            return HttpResponseNotFound("El blog que buscas no existe")
+        elif len(user) > 1:
+            return HttpResponse("Múltiples opciones", status=300)
+
+        posts = Post.objects.filter(owner=user, publish_at__lt=timezone.now()).order_by('-created_at')
+        context = {'posts_list': posts, 'user': user[0]}
+        return render(request, 'blog/blog_usuario.html', context)
 
 
 class PostDetailView(View):
