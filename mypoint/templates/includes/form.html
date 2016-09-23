@@ -1,0 +1,32 @@
+{% load widget_tweaks %}
+
+    <form method="post" role="form" class="form-horizontal" novalidate>
+        {% for field in form.visible_fields %}
+        <div id="div_{{ field.html_name }}"
+             class="form-group{% if field.errors %} has-error{% endif %}">
+            <label for="{{ field.id_for_label }}" class="control-label col-sm-2">{{ field.label }}</label>
+            <div class="col-sm-5">
+                {% if field == form.categories %}
+                    {{ field }}
+                {%  else  %}
+                    {{ field|add_class:"form-control" }}
+                {% endif %}
+            </div>
+            <div class="text-muted col-sm-3">
+                <small>{{ field.help_text }}</small>
+            </div>
+            <div class="help-block col-sm-2">
+                {{ field.errors }}
+            </div>
+        </div>
+        {% endfor %}
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        {% csrf_token %}
+        <div class="form-group">
+            <div class="col-sm-4 col-sm-offset-2">
+                <input type="submit" value="Enviar" class="btn btn-primary" />
+            </div>
+        </div>
+    </form>

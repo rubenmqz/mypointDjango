@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}Nuevo Post{% endblock%}
+
+{% block head %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
+    {{ form.media }}
+{% endblock%}
+
+{% block body %}
+    <h1>Nuevo Post</h1>
+
+    {% if error %}
+        <p>{{ error|safe }}</p>
+    {% endif %}
+
+    {% if new_post is not None %}
+        <p>
+            El post se ha creado correctamente. Puedes verlo
+            <a href="{% url 'blog_post_detail' new_post.owner new_post.pk %}">aquí</a>
+            (si la fecha y hora de publicación ha llegado).
+        </p>
+    {% endif %}
+
+    {% include "includes/form.html" %}
+{% endblock %}
