@@ -26,7 +26,9 @@ class HomeView(View):
 
 
 class BlogListView(ListView):
-
+    """
+    Muestra el listado de blogs disponibles (de los usuarios que han publicado algo)
+    """
     model = User
     template_name = "blog/blog_list.html"
 
@@ -43,7 +45,7 @@ class PostsByUserView(View):
         :param request: objeto HttpRequest con los datos de la petición
         :return: objeto HttpResponse con los datos de la respuesta
         """
-        # recupera todas los posts publicados del usuario
+        # recupera todos los posts publicados del usuario
         user = User.objects.filter(username=nombre_de_usuario)
         if len(user) == 0:
             return HttpResponseNotFound("El blog que buscas no existe")
@@ -57,17 +59,28 @@ class PostsByUserView(View):
 
 class PostDetailView(View):
 
-    def get(self, request):
+    def get(self, request, nombre_de_usuario, post_id):
         """
         Renderiza un post
         :param request: objeto HttpRequest con los datos de la petición
         :return: objeto HttpResponse con los datos de la respuesta
         """
-        # recupera todas los posts publicados
-        #TODO: No mostrar los que tengan fecha futura
-        #posts = Post.objects.all().order_by('-created_at')
-        context = {}
-        return render(request, 'blog/home.html', context)
+        # se asegura de que el autor exista
+        user = User.objects.filter(username=nombre_de_usuario)
+        if len(user) == 0:
+            return HttpResponseNotFound("El blog que buscas no existe")
+        elif len(user) > 1:
+            return HttpResponse("Múltiples opciones", status=300)
+
+        posts = Post.objects.filter(owner=user, pk=post_id, publish_at__lt=timezone.now())
+
+        if len(posts) == 0:
+            return HttpResponseNotFound("El post que buscas no existe")
+        elif len(posts) > 1:
+            return HttpResponse("Múltiples opciones", status=300)
+
+        context = {'post': posts[0]}
+        return render(request, 'blog/post_detail.html', context)
 
 
 class NewPostView(View):

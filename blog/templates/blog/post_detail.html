@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }}{% endblock%}
+
+{% block body %}
+    <article>
+        <header>
+            <h1>{{ post.title }}</h1>
+            <p>{{ post.publish_at }}</p>
+        </header>
+
+        {% if post.imgURL %}
+            <img src="{{ post.imgURL }}">
+        {% endif %}
+        {% if post.videoURL %}
+            <p></p><a href="{{ post.videoURL }}" target="_blank">Ver video</a></p>
+        {% endif %}
+        <p>{{ post.body }}</p>
+        <footer>
+            Categorías:
+            {% for categoria in post.categories.all %}
+                {{ categoria }} {% if forloop.last is False %} | {% endif %}
+            {% endfor %}
+        </footer>
+    </article>
+{% endblock %}
