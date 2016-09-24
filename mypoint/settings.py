@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'users',
     'bootstrap3_datetime',
     'widget_tweaks',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [

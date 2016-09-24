@@ -1,9 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.password_validation import validate_password
-from django.forms import ModelForm
-from django.core.exceptions import ValidationError
 
 
 class LoginForm(forms.Form):
@@ -12,6 +9,8 @@ class LoginForm(forms.Form):
 
 
 class SignupForm(UserCreationForm):
+        first_name = forms.CharField(required=True, label='Nombre')
+        last_name = forms.CharField(required=True, label='Apellido')
         email = forms.EmailField(required=True)
 
         class Meta:
@@ -25,24 +24,4 @@ class SignupForm(UserCreationForm):
                 user.save()
             return user
 
-        def clean_first_name(self):
-            """
-            Valida que el nombre esté relleno
-            :return: el valor del campo
-            """
-            cleaned_data = super().clean().get('first_name')
 
-            if cleaned_data is '':
-                raise ValidationError("Este campo es obligatorio")
-            return cleaned_data
-
-        def clean_last_name(self):
-            """
-            Valida que el apellido esté relleno
-            :return: el valor del campo
-            """
-            cleaned_data = super().clean().get('last_name')
-
-            if cleaned_data is '':
-                raise ValidationError("Este campo es obligatorio")
-            return cleaned_data
