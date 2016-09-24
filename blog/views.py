@@ -25,6 +25,13 @@ class HomeView(View):
         return render(request, 'blog/home.html', context)
 
 
+class BlogQuerySet(object):
+
+    @staticmethod
+    def get_blogs_with_content():
+        return User.objects.filter(post__isnull=False).distinct()
+
+
 class BlogListView(ListView):
     """
     Muestra el listado de blogs disponibles (de los usuarios que han publicado algo)
@@ -33,8 +40,7 @@ class BlogListView(ListView):
     template_name = "blog/blog_list.html"
 
     def get_queryset(self):
-        return User.objects.filter(post__isnull=False).distinct()
-
+        return BlogQuerySet.get_blogs_with_content()
 
 
 class PostsByUserView(View):

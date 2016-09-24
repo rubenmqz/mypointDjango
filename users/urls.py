@@ -4,8 +4,8 @@ from rest_framework.routers import DefaultRouter
 from users.api import UserViewSet
 from users.views import LoginView, LogoutView, SignupView
 
-router = DefaultRouter()
-router.register('api/1.0/users', UserViewSet, base_name='api_users_')
+routerUsers = DefaultRouter()
+routerUsers.register('api/1.0/users', UserViewSet)
 
 urlpatterns = [
     # Web URLs
@@ -14,5 +14,5 @@ urlpatterns = [
     url(r'^signup', SignupView.as_view(), name='users_signup'),
 
     #API URL's
-    url(r'', include(router.urls))
+    url(r'', include(routerUsers.urls)),
 ]

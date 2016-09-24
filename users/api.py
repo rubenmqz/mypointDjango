@@ -11,10 +11,7 @@ class CreateRetrieveUpdateDestroyViewSet(mixins.CreateModelMixin,
                                 mixins.DestroyModelMixin,
                                 viewsets.GenericViewSet):
     """
-    A viewset that provides `retrieve`, `create`, and `list` actions.
-
-    To use it, override the class and set the `.queryset` and
-    `.serializer_class` attributes.
+    Un viewset que proporciona las acciones 'retrieve', 'create', 'update' y 'destroy'.
     """
     pass
 
