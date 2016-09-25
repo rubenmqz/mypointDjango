@@ -26,3 +26,10 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ("title", "imgURL", "summary", "publish_at")
+
+
+class FullPostSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Post
+        fields = '__all__'

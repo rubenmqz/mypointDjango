@@ -1,12 +1,23 @@
 from django.contrib.auth.models import User
 from rest_framework import mixins, viewsets, filters
 from rest_framework.status import HTTP_404_NOT_FOUND
-from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.response import Response
 
 from blog.models import Post
-from blog.serializers import BlogSerializer, PostSerializer
+from blog.permissions import PostPermission
+from blog.serializers import BlogSerializer, PostSerializer, FullPostSerializer
 from blog.views import BlogQuerySet, PostsQuerySet
+
+
+class CreateRetrieveUpdateDestroyViewSet(mixins.CreateModelMixin,
+                                mixins.RetrieveModelMixin,
+                                mixins.UpdateModelMixin,
+                                mixins.DestroyModelMixin,
+                                viewsets.GenericViewSet):
+    """
+    Un viewset que proporciona las acciones 'retrieve', 'create', 'update' y 'destroy'.
+    """
+    pass
 
 
 class ListViewSet(mixins.ListModelMixin,
@@ -44,7 +55,21 @@ class PostsByUserViewSet(ListViewSet):
         return PostsQuerySet.get_posts_by_user(user, self.request.user)
 
 
-class PostViewSet(ModelViewSet):
+class PostViewSet(CreateRetrieveUpdateDestroyViewSet):
 
-    queryset = Post.objects.all().order_by('-publish_at')
-    serializer_class = PostSerializer
+    queryset = Post.objects.all()
+
+    serializer_class = FullPostSerializer
+    permission_classes = (PostPermission,)
+
+    def get_queryset(self):
+        if self.action=="retrieve":
+            return PostsQuerySet.get_post(self.kwargs['pk'], self.request.user)
+        else:
+            return Post.objects.all()
+
+    def perform_create(self, serializer):
+        return serializer.save(owner=self.request.user)
+
+    def perform_update(self, serializer):
+        return serializer.save(owner=self.request.user)

@@ -8,7 +8,7 @@ routerBlogs = DefaultRouter()
 routerBlogs.register('api/1.0/blogs', BlogViewSet)
 
 routerPosts = DefaultRouter()
-#routerPosts.register('api/1.0/posts', PostViewSet)
+routerPosts.register('api/1.0/posts', PostViewSet)
 
 
 urlpatterns = [
@@ -21,6 +21,8 @@ urlpatterns = [
 
     #API URL's
     url(r'', include(routerBlogs.urls)),
-    url(r'^api/1.0/posts\/(?P<nombre_de_usuario>[A-Za-z0-9.\+@_-]+)\/$', PostsByUserViewSet.as_view({'get': 'list'}), name='api_blog_posts_by_user'),
+    url(r'^api/1.0/posts/(?P<nombre_de_usuario>(?![0-9]+)[A-Za-z0-9.\+@_-]+)/$', PostsByUserViewSet.as_view({'get': 'list'}),
+        name='api_blog_posts_by_user'),
     url(r'', include(routerPosts.urls)),
+
 ]
