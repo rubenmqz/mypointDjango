@@ -54,6 +54,14 @@ class PostsQuerySet(object):
             posts = Post.objects.filter(owner=user, publish_at__lt=timezone.now())
         return posts.order_by('-publish_at')
 
+    @staticmethod
+    def get_post(pk, logged_user):
+        posts = Post.objects.filter(pk=pk)
+        if logged_user.is_superuser or posts[0].owner == logged_user or posts[0].publish_at<timezone.now():
+            return posts
+        else:
+            return Post.objects.none()
+
 
 class PostsByUserView(View):
 
@@ -90,7 +98,7 @@ class PostDetailView(View):
         elif len(user) > 1:
             return HttpResponse("Múltiples opciones", status=300)
 
-        posts = Post.objects.filter(owner=user, pk=post_id, publish_at__lt=timezone.now())
+        posts = PostsQuerySet.get_post(post_id, request.user).filter(owner=user)
 
         if len(posts) == 0:
             return HttpResponseNotFound("El post que buscas no existe")
