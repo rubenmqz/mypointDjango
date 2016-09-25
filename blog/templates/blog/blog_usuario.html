@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-{% block title %}Blog de {{ user.first_name }} {{ user.last_name }}{% endblock%}
+{% block title %}Blog de {{ usuario.first_name }} {{ usuario.last_name }}{% endblock%}
 
 {% block body %}
-    <h1>Blog de {{ user.first_name }} {{ user.last_name }}</h1>
+    <h1>Blog de {{ usuario.first_name }} {{ usuario.last_name }}</h1>
 
     {% include 'blog/includes/posts_loop.html' %}
 {% endblock %}

@@ -2,10 +2,14 @@ from django.conf.urls import url, include
 from rest_framework.routers import DefaultRouter
 
 from blog.views import HomeView, NewPostView, PostDetailView, PostsByUserView, BlogListView
-from blog.api import BlogViewSet
+from blog.api import BlogViewSet, PostViewSet, PostsByUserViewSet
 
-routerBlog = DefaultRouter()
-routerBlog.register('api/1.0/blog', BlogViewSet)
+routerBlogs = DefaultRouter()
+routerBlogs.register('api/1.0/blogs', BlogViewSet)
+
+routerPosts = DefaultRouter()
+#routerPosts.register('api/1.0/posts', PostViewSet)
+
 
 urlpatterns = [
     # Web URLs
@@ -16,5 +20,7 @@ urlpatterns = [
     url(r'^blogs\/(?P<nombre_de_usuario>[A-Za-z0-9.\+@_-]+)\/(?P<post_id>[0-9]+)$', PostDetailView.as_view(), name='blog_post_detail'),
 
     #API URL's
-    url(r'', include(routerBlog.urls)),
+    url(r'', include(routerBlogs.urls)),
+    url(r'^api/1.0/posts\/(?P<nombre_de_usuario>[A-Za-z0-9.\+@_-]+)\/$', PostsByUserViewSet.as_view({'get': 'list'}), name='api_blog_posts_by_user'),
+    url(r'', include(routerPosts.urls)),
 ]

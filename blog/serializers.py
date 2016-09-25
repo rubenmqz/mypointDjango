@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
+from blog.models import Post
 
 
 class BlogSerializer(serializers.ModelSerializer):
@@ -18,3 +19,10 @@ class BlogSerializer(serializers.ModelSerializer):
 
     def get_url(self, obj):
         return reverse('blog_posts_by_user', args=[obj.username], request=self.context['request'])
+
+
+class PostSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Post
+        fields = ("title", "imgURL", "summary", "publish_at")

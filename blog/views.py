@@ -43,6 +43,18 @@ class BlogListView(ListView):
         return BlogQuerySet.get_blogs_with_content()
 
 
+class PostsQuerySet(object):
+
+    @staticmethod
+    def get_posts_by_user(user, logged_user):
+        posts = None
+        if logged_user.is_superuser or user[0]==logged_user:
+            posts = Post.objects.filter(owner=user)
+        else:
+            posts = Post.objects.filter(owner=user, publish_at__lt=timezone.now())
+        return posts.order_by('-publish_at')
+
+
 class PostsByUserView(View):
 
     def get(self, request, nombre_de_usuario):
@@ -51,15 +63,15 @@ class PostsByUserView(View):
         :param request: objeto HttpRequest con los datos de la petición
         :return: objeto HttpResponse con los datos de la respuesta
         """
-        # recupera todos los posts publicados del usuario
+        # comprueba que el usuario exista
         user = User.objects.filter(username=nombre_de_usuario)
         if len(user) == 0:
             return HttpResponseNotFound("El blog que buscas no existe")
         elif len(user) > 1:
             return HttpResponse("Múltiples opciones", status=300)
 
-        posts = Post.objects.filter(owner=user, publish_at__lt=timezone.now()).order_by('-created_at')
-        context = {'posts_list': posts, 'user': user[0]}
+        posts = PostsQuerySet.get_posts_by_user(user, request.user)
+        context = {'posts_list': posts, 'usuario': user[0]}
         return render(request, 'blog/blog_usuario.html', context)
 
 
