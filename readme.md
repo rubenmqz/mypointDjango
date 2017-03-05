@@ -1,5 +1,10 @@
 #Práctica Python, Django y REST
 
+## ACTUALIZACIÓN: Práctica desplegada
+
+Desde el 05/03/2017 puede verse y probarse un despliegue de la practica en la url **django.oncetios.es
+(cambiando "once" por el número "11")**. Además de la versión web, se pueden usar los endpoints indicados en los siguientes puntos (adaptando la url, a la de despliegue).
+
 ##Instrucciones API
 
 **API DE USUARIOS**
